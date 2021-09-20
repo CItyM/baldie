@@ -2,16 +2,19 @@ from random import randint
 
 from PIL import Image
 
-from color_utils import *
-from layer import Layer
-from load import load_parts
+from .color_utils import change_color, hue_gen, rand_color
+from .load import load_parts
+from .models.layer import Layer
 
 
 class Combinator:
-    parts = load_parts()
 
-    def combine_layers(self, layers: list[Layer], hue_up: bool = False) -> Image:
-        temp_img = Image.new('RGBA', (16, 16))
+    def __init__(self, layer_folder_path: str, width: int, height: int) -> None:
+        self.parts = load_parts(layer_folder_path)
+        self.size = (width, height)
+
+    def combine_layers(self, layers: list[Layer], hue_up: bool = False) -> Image.Image:
+        temp_img = Image.new('RGBA', self.size)
 
         hues = hue_gen(rand_color(), len(layers)*2)
 
@@ -27,8 +30,8 @@ class Combinator:
 
         return temp_img
 
-    def combine(self, hue_up_components: list[str] = []) -> Image:
-        img = Image.new('RGBA', (16, 16))
+    def combine(self, hue_up_components: list[str] = []) -> Image.Image:
+        img = Image.new('RGBA', self.size)
 
         for p in self.parts:
             temp = self.combine_layers(p.base, (p.name in hue_up_components))

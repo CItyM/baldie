@@ -1,9 +1,7 @@
+from .models.rgb import RGB
 from random import randint
-from rgb import RGB
 
-from PIL import Image, ImageColor
-
-from color_utils import *
+from PIL.Image import Image
 
 
 def rand_color() -> RGB:
@@ -14,16 +12,23 @@ def rand_color() -> RGB:
 
 
 def hue_gen(color: RGB, steps: int = 10) -> list[RGB]:
-    rs, gs, bs = color.r, color.g, color.b
-    rf, gf, bf = ImageColor.getrgb('black')
+    if steps == 0:
+        return [color]
+    elif steps > 0:
+        rs, gs, bs = color.r, color.g, color.b
+        rf, gf, bf = 0, 0, 0
+    else:
+        rs, gs, bs = 0, 0, 0
+        rf, gf, bf = color.r, color.g, color.b
 
-    rdelta = int((rf-rs)/steps)
-    gdelta = int((gf-gs)/steps)
-    bdelta = int((bf-bs)/steps)
+    output = [RGB(rs, gs, bs)]
 
-    output = [color]
+    k = -(steps/abs(steps))
+    rdelta = int((k*rs-k*rf)/steps)
+    gdelta = int((k*gs-k*gf)/steps)
+    bdelta = int((k*bs-k*bf)/steps)
 
-    for _ in range(steps-1):
+    for _ in range(abs(steps)-1):
         rs += rdelta
         gs += gdelta
         bs += bdelta
@@ -33,6 +38,7 @@ def hue_gen(color: RGB, steps: int = 10) -> list[RGB]:
 
 
 def change_color(img: Image, color: RGB) -> Image:
+
     temp_img = img.copy()
 
     r, g, b = color.r, color.g, color.b

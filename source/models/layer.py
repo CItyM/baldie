@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from PIL import Image
+from PIL.Image import Image
 
 
 @dataclass

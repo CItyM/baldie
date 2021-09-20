@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from layer import Layer
+from .layer import Layer
 
 
 @dataclass

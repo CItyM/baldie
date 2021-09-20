@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from layer import Layer
-from attribute import Attribute
+from .layer import Layer
+from .attribute import Attribute
 
 
 @dataclass
